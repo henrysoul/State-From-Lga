@@ -1,0 +1,27 @@
+
+<script>
+    let residentieal_state = document.getElementById("residential_state");
+    residentieal_state.addEventListener("change",e=>{
+        let state_id = residentieal_state.options[residentieal_state.selectedIndex].value;
+        document.getElementById("lga").innerHTML="";
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data:{state_id:state_id},
+            method: "post",
+            url: "<?php echo url('ajax_lga_by_state')?>",
+            success: function (data) {
+                let lga = data.lgas;
+                var node = document.getElementById("lga");
+                let template = '<option value="">-- Select Option --</option>'
+                $.each(lga, function(key,value){
+                        template += '<option value="'+value.lga_id+'">'+value.lga+'</option>'
+                    });
+                render(template,node);
+
+            },
+            
+        });
+    });
+</script>
